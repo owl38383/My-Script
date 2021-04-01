@@ -1,0 +1,22 @@
+# 中国联通每日签到与抽奖
+
+[Script]
+
+http-request ^http:\/\/wx.10086.cn\/website\/taskCenter\/index\? script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.cookie.js, requires-body=true, tag=中国移动
+http-request ^http:\/\/wx.10086.cn\/website\/taskCenter\/sign\? script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.cookie.js, requires-body=true, tag=中国移动
+http-request ^https:\/\/clientaccess.10086.cn\/biz-orange\/LN\/uamrandcodelogin\/autoLogin script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.fee.cookie.js, requires-body=true, tag=中国移动-查话费
+http-request ^https:\/\/clientaccess.10086.cn\/biz-orange\/BN\/realFeeQuery\/getRealFee script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.fee.cookie.js, requires-body=true, tag=中国移动-查话费
+cron "20 5 8 * * *" script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.js,tag=中国移动
+cron "12 3 * * *" script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10086/10086.fee.js, tag=中国移动-查话费
+
+http-request ^https?:\/\/act.10010.com\/SigninApp\/signin\/querySigninActivity.htm script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10010/10010.cookie.js, tag=中国联通
+http-request ^https?:\/\/act.10010.com\/SigninApp(.*?)\/signin\/daySign script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10010/10010.cookie.js, tag=中国联通
+http-request ^https?:\/\/m.client.10010.com\/dailylottery\/static\/(textdl\/userLogin|active\/findActivityInfo) script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10010/10010.cookie.js, tag=中国联通
+cron "0 5 8 * * *" script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/10010/10010.js,tag=中国联通
+cron "7 0 * * *" script-path=https://raw.githubusercontent.com/wangdelu2020/hongliyu/master/liantongnotice.js, tag=联通流量话费提醒
+
+http-request ^https?:\/\/m\.client\.10010\.com\/dailylottery\/static\/(integral|doubleball)\/firstpage requires-body=1,script-path=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/10010/unicom_checkin.js,tag=联通_获取cookie
+cron "15 8 * * *" script-path=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/10010/unicom_checkin.js,tag=联通_签到与抽奖
+
+[MITM]
+hostname = m.client.10010.com, act.10010.com,wx.10086.cn,clientaccess.10086.cn
