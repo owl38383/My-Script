@@ -1,10 +1,25 @@
+# 所有节点均从公开互联网上抓取，使用clash自动检查可用性即可
+# 抓取程序已开源： https://github.com/zu1k/proxypool
+
+# port of HTTP
 port: 7890
+
+# port of SOCKS5
 socks-port: 7891
+
+# (HTTP and SOCKS5 in one port)
+# mixed-port: 7890
+
+# redir port for Linux and macOS
+# redir-port: 7892
+
 allow-lan: false
 mode: rule
 log-level: info
 external-controller: 127.0.0.1:9090
-proxies: null
+
+proxies:
+
 proxy-groups:
   - name: 全局选择
     type: select
@@ -28,31 +43,31 @@ proxy-groups:
       - all
   - name: 🇨🇳 中国
     type: url-test
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
     use:
       - cn
   - name: 🇯🇵 日本
     type: url-test
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
     use:
       - jp
   - name: 🇸🇬 新加坡
     type: url-test
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
     use:
       - sg
   - name: 🇺🇸 美国
     type: url-test
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
     use:
       - us
   - name: 其他国家
     type: url-test
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
     use:
       - others
@@ -60,24 +75,25 @@ proxy-groups:
     type: url-test
     use:
       - all
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
   - name: 负载均衡
     type: load-balance
     use:
       - all
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
   - name: 失败切换
     type: fallback
     use:
       - all
-    url: http://www.gstatic.com/generate_204
+    url: 'http://www.gstatic.com/generate_204'
     interval: 300
+
 proxy-providers:
   cn:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=CN,HK,TW&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=CN,HK,TW&speed=15"
     path: proxypoolss.tk/provider-cn.yaml
     health-check:
       enable: true
@@ -85,15 +101,23 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
   us:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=US&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=US&speed=15"
     path: proxypoolss.tk/provider-us.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.gstatic.com/generate_204
+  ca:
+    type: http
+    url: "https://proxypoolss.tk/clash/proxies?c=CA&speed=15"
+    path: proxypoolss.tk/provider-ca.yaml
     health-check:
       enable: true
       interval: 600
       url: http://www.gstatic.com/generate_204
   jp:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=JP&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=JP&speed=15"
     path: proxypoolss.tk/provider-jp.yaml
     health-check:
       enable: true
@@ -101,15 +125,23 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
   sg:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=SG&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=SG&speed=15"
     path: proxypoolss.tk/provider-sg.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.gstatic.com/generate_204
+  ch:
+    type: http
+    url: "https://proxypoolss.tk/clash/proxies?c=CH&speed=15"
+    path: proxypoolss.tk/provider-ch.yaml
     health-check:
       enable: true
       interval: 600
       url: http://www.gstatic.com/generate_204
   others:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=AU,CH,DE,GB,NL,FR,RU&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=CN,HK,TW,US,CA,JP,SG&speed=15"
     path: proxypoolss.tk/provider-others.yaml
     health-check:
       enable: true
@@ -117,16 +149,17 @@ proxy-providers:
       url: http://www.gstatic.com/generate_204
   all:
     type: http
-    url: https://proxypoolss.tk/clash/proxies?c=CN,HK,TW,US,CA,JP,SG&speed=15
+    url: "https://proxypoolss.tk/clash/proxies?c=CN,HK,TW,US,CA,JP,SG&speed=15"
     path: proxypoolss.tk/provider.yaml
     health-check:
       enable: true
       interval: 600
       url: http://www.gstatic.com/generate_204
+
 rules:
-  - DOMAIN-SUFFIX,zhxf,DIRECT
   - DOMAIN-SUFFIX,smtp,DIRECT
   - DOMAIN-KEYWORD,aria2,DIRECT
+
   - DOMAIN-SUFFIX,ampproject.org,全局选择
   - DOMAIN-SUFFIX,appspot.com,全局选择
   - DOMAIN-SUFFIX,blogger.com,全局选择
@@ -670,6 +703,7 @@ rules:
   - DOMAIN-SUFFIX,yimg.com,全局选择
   - DOMAIN,api.steampowered.com,全局选择
   - DOMAIN,store.steampowered.com,全局选择
+
   - DOMAIN-SUFFIX,aaplimg.com,DIRECT
   - DOMAIN-SUFFIX,apple.co,DIRECT
   - DOMAIN-SUFFIX,apple.com,DIRECT
@@ -682,6 +716,7 @@ rules:
   - DOMAIN-SUFFIX,me.com,DIRECT
   - DOMAIN-SUFFIX,mzstatic.com,DIRECT
   - DOMAIN,www-cdn.icloud.com.akadns.net,DIRECT
+
   - DOMAIN-SUFFIX,t.me,全局选择
   - DOMAIN-SUFFIX,tdesktop.com,全局选择
   - DOMAIN-SUFFIX,telegra.ph,全局选择
@@ -696,9 +731,11 @@ rules:
   - IP-CIDR6,2001:b28:f23d::/48,全局选择,no-resolve
   - IP-CIDR6,2001:b28:f23f::/48,全局选择,no-resolve
   - IP-CIDR6,2001:67c:4e8::/48,全局选择,no-resolve
+
   - DOMAIN-SUFFIX,googlevideo.com,全局选择
   - DOMAIN-SUFFIX,youtube.com,全局选择
   - DOMAIN,youtubei.googleapis.com,全局选择
+
   - DOMAIN-SUFFIX,netflix.com,全局选择
   - DOMAIN-SUFFIX,netflix.net,全局选择
   - DOMAIN-SUFFIX,nflxext.com,全局选择
@@ -725,6 +762,7 @@ rules:
   - IP-CIDR,192.173.64.0/18,全局选择,no-resolve
   - IP-CIDR,198.38.96.0/19,全局选择,no-resolve
   - IP-CIDR,198.45.48.0/20,全局选择,no-resolve
+
   - DOMAIN-SUFFIX,deezer.com,全局选择
   - DOMAIN-SUFFIX,dzcdn.net,全局选择
   - DOMAIN-SUFFIX,kkbox.com,全局选择
@@ -878,6 +916,7 @@ rules:
   - DOMAIN-SUFFIX,bilibili.com,DIRECT
   - DOMAIN-SUFFIX,bilibili.tv,DIRECT
   - DOMAIN-SUFFIX,bilivideo.com,DIRECT
+
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
   - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
@@ -1233,4 +1272,5 @@ rules:
   - DOMAIN,images-cn.ssl-images-amazon.com,DIRECT
   - IP-CIDR,119.28.28.28/32,DIRECT,no-resolve
   - GEOIP,CN,DIRECT
+
   - MATCH,全局选择
